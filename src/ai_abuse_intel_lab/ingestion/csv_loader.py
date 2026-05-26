@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Hashable
 from datetime import datetime
 from pathlib import Path
 
@@ -20,7 +21,8 @@ class CsvEventLoader:
         """Read the CSV file and return validated event objects."""
 
         frame = pd.read_csv(self.path)
-        return [self._row_to_event(row) for row in frame.to_dict(orient="records")]
+        rows = [self._normalize_row(row) for row in frame.to_dict(orient="records")]
+        return [self._row_to_event(row) for row in rows]
 
     def _row_to_event(self, row: dict[str, object]) -> AbuseEvent:
         """Convert a flat row into a normalized event."""
@@ -45,6 +47,12 @@ class CsvEventLoader:
             tags=tags,
             narrative=str(row.get("narrative", "")),
         )
+
+    @staticmethod
+    def _normalize_row(row: dict[Hashable, object]) -> dict[str, object]:
+        """Convert pandas row dictionaries to string-keyed dictionaries."""
+
+        return {str(key): value for key, value in row.items()}
 
     @staticmethod
     def _optional_str(value: object) -> str | None:
