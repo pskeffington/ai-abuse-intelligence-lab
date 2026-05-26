@@ -56,9 +56,18 @@ python -m ai_abuse_intel_lab --help
 pytest
 ```
 
+## Example commands
+
+```bash
+python -m ai_abuse_intel_lab analyze-csv examples/sample_events.csv
+python -m ai_abuse_intel_lab graph-summary examples/sample_events.csv
+```
+
 ## Current status
 
 This is a first-run scaffold. The current modules are intentionally minimal and are meant to establish clean boundaries before analysis logic becomes more complex.
+
+Current capabilities include CSV ingestion, repeated-signal findings, Markdown reporting, and actor-artifact-event graph summaries.
 
 ## Safety posture
 
