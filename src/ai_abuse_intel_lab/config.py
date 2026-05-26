@@ -14,7 +14,7 @@ class AppConfig:
     log_level: str = "INFO"
 
     @classmethod
-    def from_env(cls) -> "AppConfig":
+    def from_env(cls) -> AppConfig:
         """Build configuration from process environment variables."""
 
         return cls(
