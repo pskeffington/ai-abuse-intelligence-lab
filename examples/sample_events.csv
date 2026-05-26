@@ -1,0 +1,4 @@
+observed_at,event_type,source_name,actor_handle,platform,artifact_type,artifact_value,tags,narrative
+2026-05-01T12:00:00+00:00,content_post,synthetic_sample,@alpha,example,text,Repeated claim A,claim-a;synthetic,Sample defensive test event.
+2026-05-01T12:03:00+00:00,content_post,synthetic_sample,@bravo,example,text,Repeated claim A,claim-a;synthetic,Second sample event sharing a tag.
+2026-05-01T12:05:00+00:00,coordination_signal,synthetic_sample,@alpha,example,text,Shared timing pattern,synthetic;timing,Repeated actor sample.
