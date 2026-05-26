@@ -20,11 +20,25 @@ Ingestion classes translate external files or feeds into validated domain object
 
 ### Analysis
 
-Analysis classes consume normalized events and return findings. The first analyzer is intentionally simple and detects repeated tags and actor handles.
+Analysis classes consume normalized events and return findings. Current analysis components include:
+
+- `CoordinationSignalAnalyzer`, which detects repeated tags and actor handles.
+- `EventGraphBuilder`, which builds an actor-artifact-event graph and returns compact graph metrics.
 
 ### Reporting
 
 Reporting classes render findings for analysts. The first reporter emits Markdown.
+
+## Graph model
+
+The event graph is undirected and connects each event node to any observed actor, artifact, and tag nodes. This keeps graph construction simple while allowing later metrics such as centrality, shared artifacts, common tags, and connected components.
+
+Node identifiers use stable prefixes:
+
+- `event:<event_id>`
+- `actor:<handle>`
+- `artifact:<artifact_value>`
+- `tag:<tag>`
 
 ## Near-term design targets
 
