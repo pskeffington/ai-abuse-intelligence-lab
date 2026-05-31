@@ -60,6 +60,7 @@ pytest
 
 ```bash
 python -m ai_abuse_intel_lab report examples/sample_events.csv --timing-window-minutes 5 --timing-minimum-count 3
+python -m ai_abuse_intel_lab report examples/sample_events.csv --timing-window-minutes 5 --timing-minimum-count 3 --output-format json
 python -m ai_abuse_intel_lab analyze-csv examples/sample_events.csv
 python -m ai_abuse_intel_lab burst-report examples/sample_events.csv --window-minutes 5 --minimum-count 3
 python -m ai_abuse_intel_lab graph-summary examples/sample_events.csv
@@ -69,7 +70,7 @@ python -m ai_abuse_intel_lab graph-summary examples/sample_events.csv
 
 This is a first-run scaffold. The current modules are intentionally minimal and are meant to establish clean boundaries before analysis logic becomes more complex.
 
-Current capabilities include CSV ingestion, a combined baseline report pipeline, repeated-signal findings, burst-timing findings, Markdown reporting, and actor-artifact-event graph summaries.
+Current capabilities include CSV ingestion, a combined baseline report pipeline, repeated-signal findings, burst-timing findings, Markdown and JSON reporting, and actor-artifact-event graph summaries.
 
 ## Safety posture
 
