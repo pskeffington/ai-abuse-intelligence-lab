@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata from this file."
+title: "AI Abuse Intelligence Lab"
+abstract: "A defensive research toolkit for normalizing structured event data, generating analyst review signals, and producing reproducible Markdown and JSON summaries for AI-enabled platform-abuse research."
+type: software
+authors:
+  - family-names: Skeffington
+    given-names: Paul
+    email: paulskeffington@gmail.com
+    affiliation: Dartmouth College
+repository-code: "https://github.com/pskeffington/ai-abuse-intelligence-lab"
+license: MIT
+version: 0.1.0
+keywords:
+  - ai-safety
+  - platform-integrity
+  - abuse-detection
+  - graph-analysis
+  - defensive-research
