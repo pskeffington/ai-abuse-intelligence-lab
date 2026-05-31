@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Literal
 
 import typer
 from rich.console import Console
@@ -16,7 +17,10 @@ from ai_abuse_intel_lab.analysis import (
 )
 from ai_abuse_intel_lab.config import AppConfig
 from ai_abuse_intel_lab.ingestion import CsvEventLoader
-from ai_abuse_intel_lab.reporting import MarkdownFindingReporter
+from ai_abuse_intel_lab.models import Finding
+from ai_abuse_intel_lab.reporting import JsonFindingReporter, MarkdownFindingReporter
+
+ReportFormat = Literal["markdown", "json"]
 
 app = typer.Typer(help="Defensive AI abuse intelligence analysis toolkit.")
 console = Console()
@@ -37,6 +41,7 @@ def report(
     repeated_minimum_count: int = 2,
     timing_window_minutes: int = 10,
     timing_minimum_count: int = 3,
+    output_format: ReportFormat = "markdown",
 ) -> None:
     """Load a CSV file and print the combined baseline report."""
 
@@ -49,8 +54,7 @@ def report(
         )
     )
     findings = pipeline.run(events)
-    reporter = MarkdownFindingReporter()
-    console.print(reporter.render(findings))
+    console.print(_render_findings(findings, output_format))
 
 
 @app.command()
@@ -90,6 +94,14 @@ def graph_summary(path: Path) -> None:
     console.print(f"Edges: {summary.edge_count}")
     console.print(f"Connected components: {summary.connected_component_count}")
     console.print(f"Largest component size: {summary.largest_component_size}")
+
+
+def _render_findings(findings: list[Finding], output_format: ReportFormat) -> str:
+    """Render findings using the requested output format."""
+
+    if output_format == "json":
+        return JsonFindingReporter().render(findings)
+    return MarkdownFindingReporter().render(findings)
 
 
 if __name__ == "__main__":
