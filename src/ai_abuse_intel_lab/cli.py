@@ -8,6 +8,8 @@ import typer
 from rich.console import Console
 
 from ai_abuse_intel_lab.analysis import (
+    AnalysisPipeline,
+    AnalysisPipelineConfig,
     BurstSignalAnalyzer,
     CoordinationSignalAnalyzer,
     EventGraphBuilder,
@@ -30,8 +32,30 @@ def info() -> None:
 
 
 @app.command()
+def report(
+    path: Path,
+    repeated_minimum_count: int = 2,
+    timing_window_minutes: int = 10,
+    timing_minimum_count: int = 3,
+) -> None:
+    """Load a CSV file and print the combined baseline report."""
+
+    events = CsvEventLoader(path).load()
+    pipeline = AnalysisPipeline(
+        AnalysisPipelineConfig(
+            repeated_minimum_count=repeated_minimum_count,
+            timing_window_minutes=timing_window_minutes,
+            timing_minimum_count=timing_minimum_count,
+        )
+    )
+    findings = pipeline.run(events)
+    reporter = MarkdownFindingReporter()
+    console.print(reporter.render(findings))
+
+
+@app.command()
 def analyze_csv(path: Path, minimum_count: int = 2) -> None:
-    """Load a CSV file, run baseline analysis, and print Markdown findings."""
+    """Load a CSV file, run repeated-signal analysis, and print Markdown findings."""
 
     loader = CsvEventLoader(path)
     events = loader.load()
@@ -43,7 +67,7 @@ def analyze_csv(path: Path, minimum_count: int = 2) -> None:
 
 @app.command()
 def burst_report(path: Path, window_minutes: int = 10, minimum_count: int = 3) -> None:
-    """Load a CSV file and print burst-timing findings."""
+    """Load a CSV file and print timing findings."""
 
     events = CsvEventLoader(path).load()
     analyzer = BurstSignalAnalyzer(window_minutes=window_minutes, minimum_count=minimum_count)
