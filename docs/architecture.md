@@ -23,11 +23,16 @@ Ingestion classes translate external files or feeds into validated domain object
 Analysis classes consume normalized events and return findings. Current analysis components include:
 
 - `CoordinationSignalAnalyzer`, which detects repeated tags and actor handles.
+- `BurstSignalAnalyzer`, which detects concentrated timing inside a rolling window.
 - `EventGraphBuilder`, which builds an actor-artifact-event graph and returns compact graph metrics.
 
 ### Reporting
 
 Reporting classes render findings for analysts. The first reporter emits Markdown.
+
+## Timing model
+
+The timing detector sorts events by observation time, evaluates rolling windows, and emits low-confidence review findings when at least a configured number of events occur inside the configured window.
 
 ## Graph model
 
