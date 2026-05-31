@@ -7,7 +7,11 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
-from ai_abuse_intel_lab.analysis import CoordinationSignalAnalyzer, EventGraphBuilder
+from ai_abuse_intel_lab.analysis import (
+    BurstSignalAnalyzer,
+    CoordinationSignalAnalyzer,
+    EventGraphBuilder,
+)
 from ai_abuse_intel_lab.config import AppConfig
 from ai_abuse_intel_lab.ingestion import CsvEventLoader
 from ai_abuse_intel_lab.reporting import MarkdownFindingReporter
@@ -32,6 +36,17 @@ def analyze_csv(path: Path, minimum_count: int = 2) -> None:
     loader = CsvEventLoader(path)
     events = loader.load()
     analyzer = CoordinationSignalAnalyzer(minimum_count=minimum_count)
+    findings = analyzer.analyze(events)
+    reporter = MarkdownFindingReporter()
+    console.print(reporter.render(findings))
+
+
+@app.command()
+def burst_report(path: Path, window_minutes: int = 10, minimum_count: int = 3) -> None:
+    """Load a CSV file and print burst-timing findings."""
+
+    events = CsvEventLoader(path).load()
+    analyzer = BurstSignalAnalyzer(window_minutes=window_minutes, minimum_count=minimum_count)
     findings = analyzer.analyze(events)
     reporter = MarkdownFindingReporter()
     console.print(reporter.render(findings))
